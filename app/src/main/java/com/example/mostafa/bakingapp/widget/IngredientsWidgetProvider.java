@@ -18,9 +18,9 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
         Intent ingredientsRemoteViewsServiceIntent = new Intent(context, IngredientsWidgetService.class);
         views.setRemoteAdapter(R.id.widget_ingredients_list, ingredientsRemoteViewsServiceIntent);
-        views.setEmptyView(R.id.widget_ingredients_list,R.id.empty_view);
+        views.setEmptyView(R.id.widget_ingredients_list, R.id.empty_view);
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_ingredients_list);
-        appWidgetManager.updateAppWidget(appWidgetId,views);
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
@@ -42,4 +42,3 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
     }
 
 }
-

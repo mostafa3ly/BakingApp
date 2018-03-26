@@ -29,7 +29,6 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     private String positions;
     private int currentPosition = -1;
 
-
     public StepAdapter(Context context, List<Step> steps, OnStepClickListener onStepClickListener) {
         this.context = context;
         this.steps = steps;
@@ -49,7 +48,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull final StepAdapter.ViewHolder holder, int position) {
         final Step step = steps.get(position);
         holder.stepDescriptionTextView.setText(step.getShortDescription());
-        if(holder.getAdapterPosition()==currentPosition)
+        if (holder.getAdapterPosition() == currentPosition)
             holder.stepDescriptionTextView.setSelected(true);
         else
             holder.stepDescriptionTextView.setSelected(false);
@@ -91,11 +90,10 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     }
 
     public interface OnStepClickListener {
-        void onStepClick( int position);
-
+        void onStepClick(int position);
     }
-    public void select(int position)
-    {
+
+    public void select(int position) {
         currentPosition = position;
         notifyDataSetChanged();
     }

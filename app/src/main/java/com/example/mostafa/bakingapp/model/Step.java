@@ -10,8 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by mosta on 10/3/2018.
  */
 
-public class Step implements Parcelable
-{
+public class Step implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -42,8 +41,7 @@ public class Step implements Parcelable
             return (new Step[size]);
         }
 
-    }
-            ;
+    };
 
     protected Step(Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));

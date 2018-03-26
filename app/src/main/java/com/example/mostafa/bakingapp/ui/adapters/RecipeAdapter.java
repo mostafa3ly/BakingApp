@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.mostafa.bakingapp.R;
 import com.example.mostafa.bakingapp.model.Recipe;
 
@@ -28,12 +30,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     private List<Recipe> recipes;
     private OnRecipeClickListener onRecipeClickListener;
 
-
     public RecipeAdapter(Context context, List<Recipe> recipes, OnRecipeClickListener onRecipeClickListener) {
         this.context = context;
         this.recipes = recipes;
         this.onRecipeClickListener = onRecipeClickListener;
-
     }
 
     @NonNull
@@ -41,8 +41,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     public RecipeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recipe_list_item, parent, false);
-
-
         return new ViewHolder(view);
     }
 
@@ -52,6 +50,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         holder.recipeNameTextView.setText(recipe.getName());
         ScaleAnimation animation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(150);
+        if(!recipe.getImage().isEmpty() && recipe.getImage()!=null)
+            Glide.with(context).load(recipe.getImage()).into(holder.recipeImageView);
         holder.itemView.startAnimation(animation);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +72,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         @BindView(R.id.recipe_name)
         TextView recipeNameTextView;
+        @BindView(R.id.recipe_image)
+        ImageView recipeImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -79,14 +81,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         }
     }
 
-    public void add(List<Recipe> recipes)
-    {
+    public void add(List<Recipe> recipes) {
         this.recipes = recipes;
         notifyDataSetChanged();
     }
 
-    public interface OnRecipeClickListener
-    {
+    public interface OnRecipeClickListener {
         void onRecipeClick(Recipe recipe);
     }
 }

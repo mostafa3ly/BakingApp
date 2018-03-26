@@ -28,7 +28,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     private List<Ingredient> ingredients;
     private String positions;
 
-
     public IngredientAdapter(Context context, List<Ingredient> ingredients) {
         this.context = context;
         this.ingredients = ingredients;
@@ -40,8 +39,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     public IngredientAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.ingredient_list_item, parent, false);
-
-
         return new ViewHolder(view);
     }
 
@@ -67,7 +64,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
 
         @BindView(R.id.ingredient_name)
         TextView mIngredientTextView;

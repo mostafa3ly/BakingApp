@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
  */
 public class IngredientsFragment extends Fragment {
 
-
     @BindView(R.id.ingredient_list)
     RecyclerView mIngredientsRecyclerView;
 
@@ -33,7 +32,6 @@ public class IngredientsFragment extends Fragment {
     public IngredientsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,4 +65,3 @@ public class IngredientsFragment extends Fragment {
         }
     }
 }
-

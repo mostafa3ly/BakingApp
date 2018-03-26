@@ -30,7 +30,6 @@ import butterknife.ButterKnife;
 
 public class DetailsActivity extends AppCompatActivity implements StepAdapter.OnStepClickListener {
 
-
     @BindView(R.id.recipe_ingredients)
     TextView mIngredientTextView;
     @BindView(R.id.steps_list)
@@ -41,7 +40,6 @@ public class DetailsActivity extends AppCompatActivity implements StepAdapter.On
     private Recipe mRecipe;
 
     private int currentPosition = -1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +66,7 @@ public class DetailsActivity extends AppCompatActivity implements StepAdapter.On
                 showIngredients(mRecipe);
             }
         });
-
     }
-
 
     private void loadSteps(Recipe recipe) {
         mStepAdapter.add(recipe.getSteps());
@@ -82,7 +78,6 @@ public class DetailsActivity extends AppCompatActivity implements StepAdapter.On
                 IngredientsFragment ingredientsFragment = new IngredientsFragment();
                 ingredientsFragment.setArguments(getIntent().getExtras());
                 getSupportFragmentManager().beginTransaction().replace(R.id.step_container, ingredientsFragment).commit();
-
                 mIngredientTextView.setSelected(true);
                 currentPosition = -1;
                 mStepAdapter.select(currentPosition);
@@ -114,14 +109,11 @@ public class DetailsActivity extends AppCompatActivity implements StepAdapter.On
                 StepFragment stepFragment = new StepFragment();
                 stepFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.step_container, stepFragment).commit();
-
                 currentPosition = position;
                 mStepAdapter.select(currentPosition);
             }
-
             if (mIngredientTextView.isSelected())
                 mIngredientTextView.setSelected(false);
-
         } else {
             Intent intent = new Intent(this, StepActivity.class);
             intent.putExtra(Constants.RECIPE, mRecipe);
@@ -134,17 +126,13 @@ public class DetailsActivity extends AppCompatActivity implements StepAdapter.On
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-
             if (mIsTwoPane) {
                 currentPosition = savedInstanceState.getInt(Constants.POSITION);
-
                 mStepAdapter.select(currentPosition);
                 if (currentPosition == -1)
                     showIngredients(mRecipe);
-
             }
-
-                mStepsRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(Constants.STATE));
+            mStepsRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(Constants.STATE));
         }
     }
 
@@ -158,16 +146,17 @@ public class DetailsActivity extends AppCompatActivity implements StepAdapter.On
     public void pinIngredients(View view) {
         saveCurrentRecipeIngredients(mRecipe);
         updateWidget();
-        Toast.makeText(this,getString(R.string.pinned_to_home_screen),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.pinned_to_home_screen), Toast.LENGTH_SHORT).show();
     }
+
     private void saveCurrentRecipeIngredients(Recipe recipe) {
         Set<String> ingredients = new HashSet<>();
-        for (int i = 0; i <recipe.getIngredients().size(); i++) {
+        for (int i = 0; i < recipe.getIngredients().size(); i++) {
             Ingredient ingredient = recipe.getIngredients().get(i);
             ingredients.add(ingredient.getQuantity() + " " + ingredient.getMeasure() + " " + ingredient.getIngredient());
         }
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
-                .putStringSet(Constants.INGREDIENTS,ingredients)
+                .putStringSet(Constants.INGREDIENTS, ingredients)
                 .apply();
     }
 

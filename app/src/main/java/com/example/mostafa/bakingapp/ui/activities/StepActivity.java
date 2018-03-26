@@ -15,8 +15,7 @@ import com.example.mostafa.bakingapp.model.Step;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StepActivity extends AppCompatActivity implements View.OnClickListener{
-
+public class StepActivity extends AppCompatActivity implements View.OnClickListener {
 
     private int position;
     private Recipe recipe;
@@ -25,6 +24,7 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
     FloatingActionButton nextFloatingActionButton;
     @BindView(R.id.previous_step)
     FloatingActionButton previousFloatingActionButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,13 +32,12 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
 
         recipe = getIntent().getParcelableExtra(Constants.RECIPE);
-        position = getIntent().getIntExtra(Constants.STEP,0);
+        position = getIntent().getIntExtra(Constants.STEP, 0);
         setTitle(recipe.getName());
 
         if (savedInstanceState == null) {
             loadStep(position);
         }
-
 
         previousFloatingActionButton.setOnClickListener(this);
         nextFloatingActionButton.setOnClickListener(this);
@@ -48,7 +47,7 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState!=null) {
+        if (savedInstanceState != null) {
             position = savedInstanceState.getInt(Constants.POSITION, 0);
             checkPosition();
         }
@@ -64,28 +63,26 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    private void checkPosition()
-    {
+    private void checkPosition() {
         previousFloatingActionButton.setVisibility(View.VISIBLE);
         nextFloatingActionButton.setVisibility(View.VISIBLE);
-        if(position==0)
+        if (position == 0)
             previousFloatingActionButton.setVisibility(View.GONE);
-        if(position==recipe.getSteps().size()-1)
+        if (position == recipe.getSteps().size() - 1)
             nextFloatingActionButton.setVisibility(View.GONE);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.next_step:
-                if(position<recipe.getSteps().size()-1) {
+                if (position < recipe.getSteps().size() - 1) {
                     position++;
                     loadStep(position);
                 }
                 break;
             case R.id.previous_step:
-                if(position>0) {
+                if (position > 0) {
                     position--;
                     loadStep(position);
                 }
@@ -97,7 +94,7 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
     private void loadStep(int position) {
         Step step = recipe.getSteps().get(position);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.STEP,step);
+        bundle.putParcelable(Constants.STEP, step);
         StepFragment stepFragment = new StepFragment();
         stepFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.step_container, stepFragment).commit();
@@ -107,6 +104,6 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(Constants.POSITION,position);
+        outState.putInt(Constants.POSITION, position);
     }
 }

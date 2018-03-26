@@ -13,8 +13,7 @@ import java.util.List;
  * Created by mosta on 10/3/2018.
  */
 
-public class Recipe implements Parcelable
-{
+public class Recipe implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -48,8 +47,7 @@ public class Recipe implements Parcelable
             return (new Recipe[size]);
         }
 
-    }
-            ;
+    };
 
     protected Recipe(Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));

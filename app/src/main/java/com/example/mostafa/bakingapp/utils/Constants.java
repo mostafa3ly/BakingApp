@@ -10,4 +10,5 @@ public class Constants {
     public static final String STEP = "step";
     public static final String POSITION = "position";
     public static final String INGREDIENTS = "ingredients";
+    public static final String PLAY = "play" ;
 }

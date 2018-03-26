@@ -26,12 +26,10 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnRecipeClickListener, RecipeDownloader.DelayerCallback {
 
-
     @BindView(R.id.recipes_list)
     RecyclerView recipesListRecyclerView;
     @BindView(R.id.recipes_progress_bar)
     ProgressBar mProgressBar;
-
 
     private RecipeAdapter mRecipeAdapter;
 
@@ -46,16 +44,8 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnR
         mRecipeAdapter = new RecipeAdapter(this, null, this);
         recipesListRecyclerView.setAdapter(mRecipeAdapter);
         getIdlingResource();
-        RecipeDownloader.downloadRecipes(this,this,mIdlingResource);
+        RecipeDownloader.downloadRecipes(this, this, mIdlingResource);
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
-
 
     @Override
     public void onRecipeClick(Recipe recipe) {
@@ -64,9 +54,6 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnR
         intent.putExtra(Constants.RECIPE, recipe);
         startActivity(intent);
     }
-
-
-
 
     @VisibleForTesting
     @NonNull
@@ -86,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnR
 
     @Override
     public void onFailure() {
-        Toast.makeText(this,getString(R.string.failed_to_connect),Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.failed_to_connect), Toast.LENGTH_LONG).show();
         mProgressBar.setVisibility(View.GONE);
     }
 }

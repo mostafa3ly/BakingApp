@@ -42,7 +42,7 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-            Set<String> ingredients  = sharedPreferences.getStringSet(Constants.INGREDIENTS,new HashSet<String>());
+            Set<String> ingredients = sharedPreferences.getStringSet(Constants.INGREDIENTS, new HashSet<String>());
             mIngredients = new ArrayList<>();
             for (String ingredient : ingredients) {
                 mIngredients.add(ingredient);
@@ -55,7 +55,7 @@ public class IngredientsWidgetService extends RemoteViewsService {
 
         @Override
         public int getCount() {
-            if(mIngredients==null)
+            if (mIngredients == null)
                 return 0;
             return mIngredients.size();
         }

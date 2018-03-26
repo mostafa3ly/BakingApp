@@ -11,12 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.mostafa.bakingapp.utils.Constants;
+import com.bumptech.glide.Glide;
 import com.example.mostafa.bakingapp.R;
 import com.example.mostafa.bakingapp.model.Step;
 import com.example.mostafa.bakingapp.ui.activities.StepActivity;
+import com.example.mostafa.bakingapp.utils.Constants;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -28,7 +31,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,24 +41,26 @@ import butterknife.ButterKnife;
  */
 public class StepFragment extends Fragment {
 
-
     @BindView(R.id.step_video)
     SimpleExoPlayerView mVideoPlayerView;
     @BindView(R.id.step_full_description)
     TextView mStepDescriptionTextView;
     @BindView(R.id.no_video)
     TextView mNoVideoTextView;
+    @BindView(R.id.step_thumbnail)
+    ImageView mStepThumbnailImageView;
+    @BindView(R.id.description_container)
+    FrameLayout mDescriptionContainerFrameLayout;
 
     private SimpleExoPlayer mVideoPlayer;
     private String mVideoUrl;
 
     private long playbackPosition;
-
+    private boolean playWhenReady;
 
     public StepFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,10 +68,13 @@ public class StepFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_step, container, false);
         ButterKnife.bind(this, view);
         playbackPosition = C.POSITION_UNSET;
+        playWhenReady = true ;
         if (getArguments() != null) {
             Step step = getArguments().getParcelable(Constants.STEP);
             mVideoUrl = step.getVideoURL();
             mStepDescriptionTextView.setText(step.getDescription());
+            if(!step.getThumbnailURL().isEmpty() && step.getThumbnailURL()!=null)
+                Glide.with(this).load(step.getThumbnailURL()).into(mStepThumbnailImageView);
             if (mVideoUrl == null || mVideoUrl.isEmpty()) {
                 mVideoPlayerView.setVisibility(View.GONE);
             } else {
@@ -75,14 +82,12 @@ public class StepFragment extends Fragment {
                     applyFullScreenMode();
             }
         }
-
         return view;
     }
 
     private void applyFullScreenMode() {
-
         try {
-            mStepDescriptionTextView.setVisibility(View.GONE);
+            mDescriptionContainerFrameLayout.setVisibility(View.GONE);
             getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
             mVideoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
@@ -90,27 +95,15 @@ public class StepFragment extends Fragment {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (Util.SDK_INT > 23) {
-            if (mVideoUrl != null && !mVideoUrl.isEmpty()) {
-                initializePlayer(Uri.parse(mVideoUrl));
-            }
-        }
-    }
 
     @Override
     public void onResume() {
         super.onResume();
-        if ((Util.SDK_INT <= 23 || mVideoPlayer == null)) {
             if (mVideoUrl != null && !mVideoUrl.isEmpty()) {
                 initializePlayer(Uri.parse(mVideoUrl));
             }
-        }
     }
 
     @Override
@@ -118,6 +111,7 @@ public class StepFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             playbackPosition = savedInstanceState.getLong(Constants.POSITION);
+            playWhenReady = savedInstanceState.getBoolean(Constants.PLAY);
         }
     }
 
@@ -128,7 +122,7 @@ public class StepFragment extends Fragment {
                     new DefaultRenderersFactory(getContext()),
                     new DefaultTrackSelector(), new DefaultLoadControl());
             mVideoPlayerView.setPlayer(mVideoPlayer);
-            mVideoPlayer.setPlayWhenReady(true);
+            mVideoPlayer.setPlayWhenReady(playWhenReady);
             mVideoPlayer.seekTo(playbackPosition);
             MediaSource mediaSource = buildMediaSource(uri);
             mVideoPlayer.prepare(mediaSource, true, false);
@@ -144,23 +138,13 @@ public class StepFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (Util.SDK_INT <= 23) {
             releasePlayer();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
     }
 
     private void releasePlayer() {
         if (mVideoPlayer != null) {
             playbackPosition = mVideoPlayer.getCurrentPosition();
-
+            playWhenReady = mVideoPlayer.getPlayWhenReady();
             mVideoPlayer.stop();
             mVideoPlayer.release();
             mVideoPlayer = null;
@@ -171,5 +155,6 @@ public class StepFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong(Constants.POSITION, playbackPosition);
+        outState.putBoolean(Constants.PLAY,playWhenReady);
     }
 }

@@ -17,18 +17,16 @@ public class IngredientsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ingredients);
         Recipe recipe = getIntent().getParcelableExtra(Constants.RECIPE);
         setTitle(recipe.getName());
-        if(savedInstanceState==null)
-        {
+        if (savedInstanceState == null) {
             IngredientsFragment ingredientsFragment = new IngredientsFragment();
             ingredientsFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().replace(R.id.ingredient_container,ingredientsFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.ingredient_container, ingredientsFragment).commit();
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;

@@ -21,20 +21,17 @@ import retrofit2.Response;
 
 public class RecipeDownloader {
 
-
-    public interface DelayerCallback{
+    public interface DelayerCallback {
         void onDone(List<Recipe> recipes);
+
         void onFailure();
     }
 
     public static void downloadRecipes(Context context, final DelayerCallback callback,
-                                @Nullable final SimpleIdlingResource idlingResource) {
-
-
+                                       @Nullable final SimpleIdlingResource idlingResource) {
         if (idlingResource != null) {
             idlingResource.setIdleState(false);
         }
-
 
         RecipesService recipesService = APIClient.getClient().create(RecipesService.class);
         Call<List<Recipe>> call = recipesService.getRecipes();
@@ -59,4 +56,4 @@ public class RecipeDownloader {
         });
 
     }
-    }
+}
